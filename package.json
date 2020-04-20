@@ -1,0 +1,20 @@
+{
+  "name": "careware",
+  "version": "0.1.0",
+  "description": "Reminder utility to improve sanity and health.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rory Olsen",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^8.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
