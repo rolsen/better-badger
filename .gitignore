@@ -1,5 +1,8 @@
 # Begin custom ignores of this project
 
+# jsdoc
+out/
+
 # End custom ignores of this project
 
 
