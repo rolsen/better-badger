@@ -1,24 +1,20 @@
 
-const childProcess = require('child_process');
+// const childProcess = require('child_process');
 
 const path = require('path');
 const {app, powerMonitor, shell, Menu, Tray} = require('electron');
+
+const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
+
+// TODO: Try to break this
 app.requestSingleInstanceLock();
 
+// Globals
 let appIcon = null;
-
-const minutesPerReminder = 10;
-const idleSeconds = 600;
+let recurringReminder;
 
 /**
- * Outputs the audio reminder.
- */
-function reminder() {
-  childProcess.exec('say blink');
-}
-
-/**
- * @returns {string} Returns the local time. Might look like:
+ * @return {string} Returns the local time. Might look like:
  * Thu Apr 23 2020 20:38:58 GMT-0600 (Mountain Daylight Time)
  */
 function localTime() {
@@ -51,22 +47,6 @@ function registerPowerMonitorEvents() {
   });
 }
 
-/**
- * The main reminder interval.
- */
-function startBlinkReminder() {
-  setInterval(() => {
-    let powerState = powerMonitor.getSystemIdleState(idleSeconds);
-    if (powerState === 'active') {
-      console.log(localTime(), 'Reminding');
-      reminder();
-    }
-    else {
-      console.log(localTime(), `No reminder power state was: ${powerState}`);
-    }
-  }, minutesPerReminder * 60 * 1000);
-}
-
 app.on('ready', (event) => {
   const iconName = 'iconTemplate.png';
   const iconPath = path.join(__dirname, iconName);
@@ -83,7 +63,7 @@ app.on('ready', (event) => {
   }, {
     label: 'Say Blink',
     click: () => {
-      reminder();
+      recurringReminder.reminder();
     },
   }]);
 
@@ -91,8 +71,7 @@ app.on('ready', (event) => {
   appIcon.setContextMenu(contextMenu);
 
   registerPowerMonitorEvents();
-  startBlinkReminder();
-  reminder();
+  recurringReminder = new RecurringAudioReminder();
 });
 
 app.on('window-all-closed', () => {

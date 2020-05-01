@@ -14,6 +14,9 @@ module.exports = {
   'parserOptions': {
     'ecmaVersion': 2018,
   },
+  'ignorePatterns': [
+    'out/'
+  ],
   'rules': {
   },
 };

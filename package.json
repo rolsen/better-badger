@@ -4,10 +4,10 @@
   "description": "Reminder utility to improve sanity and health.",
   "main": "index.js",
   "scripts": {
-    "jsdoc": "./node_modules/.bin/jsdoc index.js",
+    "jsdoc": "./node_modules/.bin/jsdoc lib/recurring_audio_reminder.js",
     "lint": "npx eslint .",
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Rory Olsen",
   "license": "MIT",
@@ -17,6 +17,7 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
-    "jsdoc": "^3.6.4"
+    "jsdoc": "^3.6.4",
+    "mocha": "^7.1.1"
   }
 }
