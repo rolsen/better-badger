@@ -48,7 +48,7 @@ function registerPowerMonitorEvents() {
 }
 
 app.on('ready', (event) => {
-  const iconName = 'iconTemplate.png';
+  const iconName = 'resources/eye_clock_12_16x16.png';
   const iconPath = path.join(__dirname, iconName);
   appIcon = new Tray(iconPath);
 
