@@ -2,7 +2,7 @@
 // const childProcess = require('child_process');
 
 const path = require('path');
-const {app, powerMonitor, shell, Menu, Tray} = require('electron');
+const {app, powerMonitor, Menu, MenuItem, Tray} = require('electron');
 
 const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
 
@@ -10,8 +10,19 @@ const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
 app.requestSingleInstanceLock();
 
 // Globals
-let appIcon = null;
-let recurringReminder;
+// TODO: Class
+const appState = {
+  appTray: null,
+  recurringReminder: null,
+  menu: {
+    enabled: null,
+  },
+  enableDisableClosure: null,
+};
+
+appState.enableDisableClosure = function() {
+  appState.recurringReminder.setEnableState(appState.menu.enabled.checked);
+};
 
 /**
  * @return {string} Returns the local time. Might look like:
@@ -50,30 +61,27 @@ function registerPowerMonitorEvents() {
 app.on('ready', (event) => {
   const iconName = 'resources/eye_clock_12_16x16.png';
   const iconPath = path.join(__dirname, iconName);
-  appIcon = new Tray(iconPath);
+  appState.appTray = new Tray(iconPath);
 
-  const contextMenu = Menu.buildFromTemplate([{
-    label: 'Best',
+  appState.menu.enabled = new MenuItem({
+    label: 'Enabled',
     type: 'checkbox',
-  }, {
-    label: 'Beep',
+    checked: true,
     click: () => {
-      shell.beep();
-    },
-  }, {
-    label: 'Say Blink',
-    click: () => {
-      recurringReminder.reminder();
-    },
-  }]);
+      appState.enableDisableClosure();
+    }
+  });
+  const contextMenu = new Menu();
+  contextMenu.append(appState.menu.enabled);
 
-  appIcon.setToolTip('CareWare: Much blink. So wowowow.');
-  appIcon.setContextMenu(contextMenu);
+
+  appState.appTray.setToolTip('CareWare: Much blink. So wowowow.');
+  appState.appTray.setContextMenu(contextMenu);
 
   registerPowerMonitorEvents();
-  recurringReminder = new RecurringAudioReminder();
+  appState.recurringReminder = new RecurringAudioReminder(appState.menu.enabled.checked);
 });
 
 app.on('window-all-closed', () => {
-  if (appIcon) appIcon.destroy();
+  if (appState.appTray) appState.appTray.destroy();
 });
