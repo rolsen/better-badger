@@ -19,6 +19,7 @@ Quick menu
 
 - Pull one-time reminders from Google spreadsheet
 - Set reminder volume separate from system volume
+- Add as startup item
 
 
 ## P2

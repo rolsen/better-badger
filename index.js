@@ -2,7 +2,8 @@
 // const childProcess = require('child_process');
 
 const path = require('path');
-const {app, powerMonitor, Menu, MenuItem, Tray} = require('electron');
+const {app, powerMonitor, BrowserWindow, ipcMain, Menu, MenuItem, Tray} =
+  require('electron');
 
 const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
 
@@ -31,6 +32,40 @@ appState.enableDisableClosure = function() {
 function localTime() {
   return new Date().toString();
 };
+
+
+ipcMain.on('set-interval-minutes', (event, interval) => {
+  appState.recurringReminder.setIntervalMinutes(interval);
+});
+
+/**
+ * Show the configurations window
+ */
+function showConfigurationsWindow() {
+  const modalPath = path.join('file://', __dirname, 'windows/configurations.html');
+  let win = new BrowserWindow({
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
+
+  win.on('close', () => {
+    win = null;
+  });
+  win.loadURL(modalPath);
+  win.show();
+};
+
+/**
+ * Ends the process by destroying state.
+ */
+function appShutdown() {
+  // appState.appTray.destroy();
+  // appState.recurringReminder.finalize();
+  // appState = null;
+  process.exit(0);
+}
 
 
 function registerPowerMonitorEvents() {
@@ -69,19 +104,32 @@ app.on('ready', (event) => {
     checked: true,
     click: () => {
       appState.enableDisableClosure();
-    }
+    },
   });
   const contextMenu = new Menu();
+  contextMenu.append(new MenuItem({
+    label: 'Show Configurations',
+    click: () => {
+      showConfigurationsWindow();
+    },
+  }));
   contextMenu.append(appState.menu.enabled);
-
+  contextMenu.append(new MenuItem({
+    label: 'Quit',
+    click: () => {
+      appShutdown();
+    },
+  }));
 
   appState.appTray.setToolTip('CareWare: Much blink. So wowowow.');
   appState.appTray.setContextMenu(contextMenu);
 
   registerPowerMonitorEvents();
-  appState.recurringReminder = new RecurringAudioReminder(appState.menu.enabled.checked);
+  appState.recurringReminder =
+    new RecurringAudioReminder(appState.menu.enabled.checked);
 });
 
 app.on('window-all-closed', () => {
-  if (appState.appTray) appState.appTray.destroy();
+  // Nothing, we want the tray icon to continue to exist when the configuration
+  // window is closed.
 });
