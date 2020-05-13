@@ -27,6 +27,17 @@ body {
   text-decoration: none;
 }
 
+.showMessage {
+  visibility: visible;
+  opacity: 1;
+}
+
+.fadeMessage {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
 </style>
 
 <h2>Hello World!</h2>
@@ -39,6 +50,9 @@ body {
     <input id="setIntervalApply" type="button" value="Set new interval">
   </div>
 </form>
+<div>
+  <p id="setIntervalMessage"></p>
+</div>
 
 <a id="close" href="javascript:window.close()">Close this Window</a>
 

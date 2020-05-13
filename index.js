@@ -34,8 +34,9 @@ function localTime() {
 };
 
 
-ipcMain.on('set-interval-minutes', (event, interval) => {
-  appState.recurringReminder.setIntervalMinutes(interval);
+ipcMain.handle('set-interval-minutes', async (event, interval) => {
+  await appState.recurringReminder.setIntervalMinutes(interval);
+  return 'Saved';
 });
 
 /**

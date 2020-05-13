@@ -8,5 +8,20 @@ applyBtn.addEventListener('click', setIntervalMinutes);
  */
 function setIntervalMinutes() {
   const minutesEl = document.getElementById('intervalLength');
-  ipcRenderer.send('set-interval-minutes', minutesEl.valueAsNumber);
+  const interval = minutesEl.valueAsNumber;
+  ipcRenderer.invoke('set-interval-minutes', interval)
+  .then((res) => {
+    const messageEl = document.getElementById('setIntervalMessage');
+    messageEl.innerHTML = res;
+
+    if (messageEl.className = 'fadeMessage') {
+      messageEl.className = 'showMessage';
+    }
+    if (res === 'Saved') {
+      setTimeout(() => {
+        messageEl.className = 'fadeMessage';
+      }, 250);
+    }
+  })
+  .catch((error) => {console.log('setIntervalMinutes caught', error)});
 }
