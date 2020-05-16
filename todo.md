@@ -2,9 +2,6 @@
 
 ## P0
 
-- Configuration panel
-  - Interval length
-
 Quick menu
   - Disable
       - Add disable for
@@ -17,16 +14,26 @@ Quick menu
 
 ## P1
 
+- Architecture. MVC
 - Pull one-time reminders from Google spreadsheet
 - Set reminder volume separate from system volume
 - Add as startup item
 
 
+
 ## P2
 
 - Icon: Better.
-- Icon: Blink when outputting reminder.
+- Sound enabled mode
+    - In menu, change text to Sound enabled / Enable sound
+    - Blink icon when reminder is triggered
 - Icon: Move clock hand.
+
+
+
+## P3
+
+Try to break app.requestSingleInstanceLock();
 
 
 

@@ -7,11 +7,9 @@ const {app, powerMonitor, BrowserWindow, ipcMain, Menu, MenuItem, Tray} =
 
 const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
 
-// TODO: Try to break this
 app.requestSingleInstanceLock();
 
 // Globals
-// TODO: Class
 const appState = {
   appTray: null,
   recurringReminder: null,
