@@ -38,8 +38,7 @@ ipcMain.handle('set-interval-minutes', async (event, interval) => {
   try {
     await appState.recurringReminder.setIntervalMinutes(interval);
     return 'Saved';
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
     return err.message;
   }
