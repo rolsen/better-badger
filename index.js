@@ -13,14 +13,6 @@ app.requestSingleInstanceLock();
 const appState = {
   appTray: null,
   recurringReminder: null,
-  menu: {
-    enabled: null,
-  },
-  enableDisableClosure: null,
-};
-
-appState.enableDisableClosure = function() {
-  appState.recurringReminder.setEnableState(appState.menu.enabled.checked);
 };
 
 /**
@@ -61,16 +53,6 @@ function showConfigurationsWindow() {
   win.show();
 };
 
-/**
- * Ends the process by destroying state.
- */
-function appShutdown() {
-  // appState.appTray.destroy();
-  // appState.recurringReminder.finalize();
-  // appState = null;
-  process.exit(0);
-}
-
 
 function registerPowerMonitorEvents() {
   const registerPmEventAsDebug = (name) => {
@@ -102,35 +84,91 @@ app.on('ready', (event) => {
   const iconPath = path.join(__dirname, iconName);
   appState.appTray = new Tray(iconPath);
 
-  appState.menu.enabled = new MenuItem({
-    label: 'Enabled',
-    type: 'checkbox',
-    checked: true,
-    click: () => {
-      appState.enableDisableClosure();
+  function addTemporaryDisable(time) {
+    appState.recurringReminder.addTemporaryDisable(time);
+    updateTray();
+  }
+
+  function updateTray() {
+    let disableDeadline = appState.recurringReminder.temporaryDisableDeadline;
+    let now = new Date();
+    if (disableDeadline && disableDeadline > now) {
+      let timeRemaining = disableDeadline.getTime() - now.getTime();
+      let rem = timeRemaining / 1000 / 60;
+      appState.menuTemplate[4].label = `Clear disable - ${rem} minutes left`
+      console.log(`Clear disable - ${rem} minutes left`)
+    }
+    else {
+      appState.menuTemplate[4].label = `Clear disable`
+    }
+
+    const contextMenu = Menu.buildFromTemplate(appState.menuTemplate);
+    appState.appTray.setContextMenu(contextMenu);
+  };
+
+  appState.menuTemplate = [
+    {
+      label: 'Show Configurations',
+      click: () => {
+        showConfigurationsWindow();
+      },
     },
-  });
-  const contextMenu = new Menu();
-  contextMenu.append(new MenuItem({
-    label: 'Show Configurations',
-    click: () => {
-      showConfigurationsWindow();
+    {type: 'separator'},
+    {
+      label: 'Enabled',
+      type: 'checkbox',
+      checked: true,
+      click: (menuItem) => {
+        appState.recurringReminder.setEnableState(menuItem.checked);
+      },
     },
-  }));
-  contextMenu.append(appState.menu.enabled);
-  contextMenu.append(new MenuItem({
-    label: 'Quit',
-    click: () => {
-      appShutdown();
+    {
+      label: 'Add time to temporary disable',
+      submenu: [
+        {
+          label: 'Add 1 hour',
+          click: () => {
+            addTemporaryDisable({hours: 1});
+          },
+        },
+        {
+          label: 'Add 3 hour',
+          click: () => {
+            addTemporaryDisable({hours: 3});
+          },
+        },
+        {
+          label: 'Add 8 hour',
+          click: () => {
+            addTemporaryDisable({hours: 8});
+          },
+        },
+      ]
     },
-  }));
+    {
+      label: 'Clear disable',
+      click: () => {
+        appState.recurringReminder.clearDisableTimer();
+        updateTray();
+      },
+    },
+    {type: 'separator'},
+    {
+      label: 'Quit',
+      role: 'quit',
+    },
+  ];
+
+  const contextMenu = Menu.buildFromTemplate(appState.menuTemplate);
 
   appState.appTray.setToolTip('CareWare: Much blink. So wowowow.');
   appState.appTray.setContextMenu(contextMenu);
 
   registerPowerMonitorEvents();
   appState.recurringReminder =
-    new RecurringAudioReminder(appState.menu.enabled.checked);
+    new RecurringAudioReminder({
+      enabled: true,
+    });
 });
 
 app.on('window-all-closed', () => {
