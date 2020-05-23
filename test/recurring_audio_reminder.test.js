@@ -16,6 +16,19 @@ function createLocalDatetime(hours, minutes, seconds = 0) {
   return date;
 }
 
+/**
+ * @param {callable} func The function to test. Should throw an error.
+ * @return {*|null} Returns whatever is thrown or null if no error is thrown.
+ */
+function throwTester(func) {
+  try {
+    func();
+  } catch (error) {
+    return error;
+  }
+  return null;
+}
+
 describe('RecurringAudioReminder', function() {
   const tests = [
     {
@@ -56,6 +69,85 @@ describe('RecurringAudioReminder', function() {
         assert.equal(RecurringAudioReminder.isTime(dayPeriod, test['time']),
             test['res']);
       });
+    });
+  });
+});
+
+describe('RecurringAudioReminder', function() {
+  let reminder;
+  beforeEach(function() {
+    reminder = new RecurringAudioReminder({verbose: false});
+  });
+  afterEach(function() {
+    reminder.finalize();
+    delete reminder;
+  });
+  describe('#addTemporaryDisable', function() {
+    it('should cumulatively add time', function() {
+      // Testing temporaryDisableDeadline directly is quick n dirty.
+      assert.equal(reminder.temporaryDisableDeadline, null);
+
+      const now = new Date();
+      reminder.addTemporaryDisable({hours: 1});
+      assert.ok(reminder.temporaryDisableDeadline);
+      const nowPlusHour = now.getTime() + 1000 * 60 * 60;
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() >= nowPlusHour,
+          'temporaryDisableDeadline should be an hour ahead of now');
+
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() < nowPlusHour + 1000,
+          'PlusHour - should not be not ahead by over a second');
+
+      reminder.addTemporaryDisable({hours: 1});
+      assert.ok(reminder.temporaryDisableDeadline);
+      const nowPlusTwoHours = nowPlusHour + 1000 * 60 * 60;
+
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() >= nowPlusTwoHours,
+          'temporaryDisableDeadline should be two hours ahead of now');
+
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() < nowPlusTwoHours + 1000,
+          'PlusTwoHours - should not be not ahead by over a second');
+
+      reminder.addTemporaryDisable({minutes: 3});
+      assert.ok(reminder.temporaryDisableDeadline);
+      const nowPlus123Minutes = nowPlusTwoHours + 1000 * 60 * 3;
+
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() >= nowPlus123Minutes,
+          'temporaryDisableDeadline should be 123 minutes ahead of now');
+
+      assert.ok(
+          reminder.temporaryDisableDeadline.getTime() <
+            nowPlus123Minutes + 1000,
+          'Plus123Minutes - should not be not ahead by over a second');
+
+      reminder.clearDisableTimer();
+
+      assert.equal(reminder.temporaryDisableDeadline, null);
+    });
+
+    it('should throw an error upon null input', function() {
+      const error = throwTester(() => {
+        reminder.addTemporaryDisable();
+      });
+      assert.ok(error instanceof TypeError);
+    });
+
+    it('should throw an error upon empty object as input', function() {
+      const error = throwTester(() => {
+        reminder.addTemporaryDisable({});
+      });
+      assert.ok(error instanceof TypeError);
+    });
+
+    it('should throw an error upon mistyped parameter key', function() {
+      const error = throwTester(() => {
+        reminder.addTemporaryDisable({'hourz': 3});
+      });
+      assert.ok(error instanceof TypeError);
     });
   });
 });

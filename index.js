@@ -2,7 +2,7 @@
 // const childProcess = require('child_process');
 
 const path = require('path');
-const {app, powerMonitor, BrowserWindow, ipcMain, Menu, MenuItem, Tray} =
+const {app, powerMonitor, BrowserWindow, ipcMain, Menu, Tray} =
   require('electron');
 
 const RecurringAudioReminder = require('./lib/recurring_audio_reminder.js');
@@ -84,22 +84,26 @@ app.on('ready', (event) => {
   const iconPath = path.join(__dirname, iconName);
   appState.appTray = new Tray(iconPath);
 
+  /**
+   * @param {obj} time Passed to RecurringAudioReminder::addTemporaryDisable
+   */
   function addTemporaryDisable(time) {
     appState.recurringReminder.addTemporaryDisable(time);
     updateTray();
   }
 
+  /**
+   * Pulls all relevant state and updates the tray menu.
+   */
   function updateTray() {
-    let disableDeadline = appState.recurringReminder.temporaryDisableDeadline;
-    let now = new Date();
+    const disableDeadline = appState.recurringReminder.temporaryDisableDeadline;
+    const now = new Date();
     if (disableDeadline && disableDeadline > now) {
-      let timeRemaining = disableDeadline.getTime() - now.getTime();
-      let rem = timeRemaining / 1000 / 60;
-      appState.menuTemplate[4].label = `Clear disable - ${rem} minutes left`
-      console.log(`Clear disable - ${rem} minutes left`)
-    }
-    else {
-      appState.menuTemplate[4].label = `Clear disable`
+      const timeRemaining = disableDeadline.getTime() - now.getTime();
+      const rem = Math.round(timeRemaining / 1000 / 60);
+      appState.menuTemplate[4].label = `Clear disable - ${rem} minutes left`;
+    } else {
+      appState.menuTemplate[4].label = `Clear disable`;
     }
 
     const contextMenu = Menu.buildFromTemplate(appState.menuTemplate);
@@ -143,7 +147,7 @@ app.on('ready', (event) => {
             addTemporaryDisable({hours: 8});
           },
         },
-      ]
+      ],
     },
     {
       label: 'Clear disable',
