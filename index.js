@@ -165,7 +165,7 @@ app.on('ready', (event) => {
 
   const contextMenu = Menu.buildFromTemplate(appState.menuTemplate);
 
-  appState.appTray.setToolTip('CareWare: Much blink. So wowowow.');
+  appState.appTray.setToolTip('Better Badger');
   appState.appTray.setContextMenu(contextMenu);
 
   registerPowerMonitorEvents();

@@ -1,7 +1,12 @@
 {
-  "name": "careware",
+  "name": "better-badger",
+  "description": "Audio reminder desktop application with system tray controls.",
   "version": "0.1.0",
-  "description": "Reminder utility to improve sanity and health.",
+  "author": "Rory Olsen",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/rolsen/better-badger"
+  },
   "main": "index.js",
   "scripts": {
     "jsdoc": "./node_modules/.bin/jsdoc lib/recurring_audio_reminder.js",
@@ -9,8 +14,6 @@
     "start": "electron .",
     "test": "mocha"
   },
-  "author": "Rory Olsen",
-  "license": "MIT",
   "dependencies": {
     "electron": "^8.2.3"
   },
