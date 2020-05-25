@@ -5,6 +5,14 @@ Nudge yourself to be more aware, but don't let reminders interrupt you.
 An audio reminder desktop application with a system tray. Improve awareness with audio reminders on an interval of multiple minutes or hours.
 
 
+## Features
+
+- No pop-ups to dismiss
+- System tray controls
+    - Disable/Enable
+    - Temporary disable
+
+
 ## Examples
 
 Excuse me, but plz don't forget to:
@@ -24,12 +32,14 @@ Excuse me, but plz don't forget to:
 macOS-only.
 
 
-## Features
+## Setup
 
-- No pop-ups to dismiss
-- System tray controls
-    - Disable/Enable
-    - Temporary disable
+```
+git clone git@github.com:rolsen/better-badger.git
+cd better-badger
+npm install
+npm start
+```
 
 
 ## Personal Anecdote
