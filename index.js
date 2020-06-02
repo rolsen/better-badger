@@ -1,6 +1,6 @@
 // index.js
 
-const child_process = require('child_process');
+const childProcess = require('child_process');
 
 const {app, powerMonitor} = require('electron');
 const BetterBadger = require('./lib/better-badger.js');
@@ -11,6 +11,9 @@ let badger;
 
 app.on('ready', (event) => {
   badger = new BetterBadger();
+  badger.on('ready', () => {
+    console.log('Ready');
+  });
 
   const registerPmEventAsDebug = (name) => {
     powerMonitor.on(name, () => {
@@ -27,10 +30,10 @@ app.on('ready', (event) => {
   registerPmEventAsDebug('unlock-screen');
 
   powerMonitor.on('lock-screen', () => {
-    child_process.exec('say Maybe charge the mouse')
+    childProcess.exec('say Maybe charge the mouse');
   });
   powerMonitor.on('unlock-screen', () => {
-    child_process.exec('say "It\'s goal time!"')
+    childProcess.exec('say "It\'s goal time!"');
   });
 });
 
