@@ -1,5 +1,7 @@
 // index.js
 
+const child_process = require('child_process');
+
 const {app, powerMonitor} = require('electron');
 const BetterBadger = require('./lib/better-badger.js');
 
@@ -10,31 +12,25 @@ let badger;
 app.on('ready', (event) => {
   badger = new BetterBadger();
 
-  badger.on('ready', () => {
-    function registerPowerMonitorEvents() {
-      const registerPmEventAsDebug = (name) => {
-        powerMonitor.on(name, () => {
-          console.log(localTime(), name);
-        });
-      };
+  const registerPmEventAsDebug = (name) => {
+    powerMonitor.on(name, () => {
+      console.log(BetterBadger.localTime(), name);
+    });
+  };
 
-      registerPmEventAsDebug('suspend');
-      registerPmEventAsDebug('resume');
-      registerPmEventAsDebug('on-ac');
-      registerPmEventAsDebug('on-battery');
-      registerPmEventAsDebug('shutdown');
-      registerPmEventAsDebug('lock-screen');
-      registerPmEventAsDebug('unlock-screen');
+  registerPmEventAsDebug('suspend');
+  registerPmEventAsDebug('resume');
+  registerPmEventAsDebug('on-ac');
+  registerPmEventAsDebug('on-battery');
+  registerPmEventAsDebug('shutdown');
+  registerPmEventAsDebug('lock-screen');
+  registerPmEventAsDebug('unlock-screen');
 
-      powerMonitor.on('lock-screen', () => {
-        console.log('fare thee well');
-      });
-      powerMonitor.on('unlock-screen', () => {
-        console.log('welcome');
-      });
-    }
-
-    registerPowerMonitorEvents();
+  powerMonitor.on('lock-screen', () => {
+    child_process.exec('say Maybe charge the mouse')
+  });
+  powerMonitor.on('unlock-screen', () => {
+    child_process.exec('say "It\'s goal time!"')
   });
 });
 
