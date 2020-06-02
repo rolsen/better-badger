@@ -14,7 +14,7 @@ function setIntervalMinutes() {
         const messageEl = document.getElementById('setIntervalMessage');
         messageEl.innerHTML = res;
 
-        if (messageEl.className = 'fadeMessage') {
+        if (messageEl.className === 'fadeMessage') {
           messageEl.className = 'showMessage';
         }
         if (res === 'Saved') {

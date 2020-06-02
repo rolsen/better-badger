@@ -1,3 +1,5 @@
+// recurring_audio_reminder.test.js
+
 const RecurringAudioReminder = require('../lib/recurring_audio_reminder.js');
 
 const assert = require('assert');
@@ -80,7 +82,7 @@ describe('RecurringAudioReminder', function() {
   });
   afterEach(function() {
     reminder.finalize();
-    delete reminder;
+    reminder = null;
   });
   describe('#addTemporaryDisable', function() {
     it('should cumulatively add time', function() {
