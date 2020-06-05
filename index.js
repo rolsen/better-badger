@@ -3,7 +3,7 @@
 const childProcess = require('child_process');
 
 const {app, powerMonitor} = require('electron');
-const BetterBadger = require('./lib/better-badger.js');
+const BetterBadger = require('./lib/better_badger.js');
 
 app.requestSingleInstanceLock();
 
