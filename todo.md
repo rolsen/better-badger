@@ -2,14 +2,9 @@
 
 ## P0
 
-Quick menu
-  - Disable
-      - Add disable for
-         - 1 hour
-         - 3 hours
-         - 8 hours
-         - Clear temporary disable
-
+System settings
+Multiple reminders
+Debug mode
 
 
 ## P1
@@ -23,7 +18,10 @@ Quick menu
 
 ## P2
 
-- Icon: Better.
+- Icon:
+    - Better
+    - Dark-mode. Maybe: https://www.electronjs.org/docs/api/native-image
+    - Disabled
 - Sound enabled mode
     - In menu, change text to Sound enabled / Enable sound
     - Blink icon when reminder is triggered
