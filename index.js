@@ -30,7 +30,10 @@ app.on('ready', (event) => {
   registerPmEventAsDebug('unlock-screen');
 
   powerMonitor.on('lock-screen', () => {
-    childProcess.exec('say Maybe charge the mouse');
+    let now = new Date();
+    if (now.getHours() > 21 && now.getMinutes() > 30) {
+      childProcess.exec('say Maybe charge the mouse');
+    }
   });
   powerMonitor.on('unlock-screen', () => {
     childProcess.exec('say "It\'s goal time!"');
