@@ -1,8 +1,12 @@
-# Better Badger
+<p align="center">
+  <img alt="Better Badger" src="https://user-images.githubusercontent.com/279439/84101822-1f31c780-a9cc-11ea-82cd-22a9a0a68824.jpeg" width="480">
+</p>
 
-Nudge yourself to be more aware, but don't let reminders interrupt you.
+<h1 align="center">Better Badger</h1>
 
-An audio reminder desktop application with a system tray. Improve awareness with audio reminders on an interval of multiple minutes or hours.
+<p align="center">Nudge yourself to be more aware, but don't let reminders interrupt you.</p>
+
+<p align="center">An audio reminder desktop application with a system tray. Improve awareness with audio reminders on an interval of multiple minutes or hours.</p>
 
 
 ## Features
