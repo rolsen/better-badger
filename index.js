@@ -31,7 +31,7 @@ app.on('ready', (event) => {
 
   powerMonitor.on('lock-screen', () => {
     let now = new Date();
-    if (now.getHours() > 21 && now.getMinutes() > 30) {
+    if (now.getHours() >= 21 && now.getMinutes() >= 0) {
       childProcess.exec('say Maybe charge the mouse');
     }
   });
