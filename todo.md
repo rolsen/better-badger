@@ -2,17 +2,16 @@
 
 ## P0
 
-System settings
-Multiple reminders
-Debug mode
+- Architecture. MVC
+- Pull one-time reminders from Google spreadsheet
 
 
 ## P1
 
-- Architecture. MVC
-- Pull one-time reminders from Google spreadsheet
 - Set reminder volume separate from system volume
 - Add as startup item
+- Multiple reminders
+- Event-based reminders
 
 
 

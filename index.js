@@ -43,5 +43,7 @@ app.on('ready', (event) => {
 app.on('window-all-closed', () => {
   // Nothing, we want the tray icon to continue to exist when the
   // configuration window is closed.
+
+  badger.saveToDisk();
 });
 
