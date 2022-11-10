@@ -15,7 +15,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "electron": "^8.2.3",
+    "electron": "^18.3.7",
     "plist": "^3.0.1"
   },
   "devDependencies": {
